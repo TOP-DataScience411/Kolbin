@@ -1,4 +1,5 @@
 def tree_leaves(branch_list: list) -> int:
+    """Функция считает количество строк со значением 'leaf' в списке."""
     num = 0
     for branch in branch_list:
         if type(branch) is list:
