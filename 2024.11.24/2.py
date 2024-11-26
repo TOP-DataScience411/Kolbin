@@ -1,6 +1,8 @@
 from collections.abc import Iterable
 
 def product(iterable: Iterable[float]) -> float:
+    """Функция принимает обязательным позиционно-ключевым аргументом итерируемый объект с числами 
+    в качестве элементов и возвращает их произведение. Функция возвращает объект типа float."""
     it = list(iterable)
     if len(it) > 1:
         it[0] = float(it.pop(0) * it[0]) + 0
