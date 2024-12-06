@@ -7,8 +7,7 @@ num = num // 10
 digit_1 = num
 
 # ИСПРАВИТЬ: один вызов функции print() оптимальнее, чем два
-print(f"Сумма цифр = {digit_1 + digit_2 + digit_3}")
-print(f"Произведение цифр = {digit_1 * digit_2 * digit_3}")
+print(f"Сумма цифр = {digit_1 + digit_2 + digit_3}\nПроизведение цифр = {digit_1 * digit_2 * digit_3}")
 
 
 
