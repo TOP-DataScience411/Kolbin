@@ -5,6 +5,8 @@ from re import findall, S
 
 
 def json_from_html(url: str, modules_pattern: str, encoding: str ='utf-8') -> Path:
+    """ Функция по заданному шаблону извлекает из HTML документа структурируемые данные 
+        и помещает их в JSON файл. """
     with urlopen(url) as response:
         html = response.read()
         content_type = response.headers.get_content_charset()
