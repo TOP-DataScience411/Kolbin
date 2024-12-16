@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from json import dumps
 from pathlib import Path
+from sys import path
 from re import findall, S
 
 
@@ -19,16 +20,19 @@ def json_from_html(url: str, modules_pattern: str, encoding: str ='utf-8') -> Pa
     data_dict = dict(findall(modules_pattern, html, S))
     json_data = dumps(data_dict, ensure_ascii=False, indent=2)
     
-    current_path = globals()["__loader__"].path
-    if url[-4:] == 'html':
-        name_json_file = url[url.rfind("/")+1:-4] + "json"
+    if url.endswith('html'):
+        current_path = url
+        name_index = current_path.rfind("/") + 1
     else:
-        name_json_file = current_path[current_path.rfind("\\")+1:-2] + "json" 
+        current_path = globals()["__file__"]
+        name_index = current_path.rfind("\\") + 1
+    
+    name_json_file = current_path[name_index:].split(".")[0] + ".json" 
         
     with open(name_json_file, "w", encoding=encoding) as output:
         output.writelines(json_data)
         
-    return Path(current_path[:current_path.rfind("\\")+1]+name_json_file)
+    return Path(path[0] + "/" + name_json_file)
 
 
 
