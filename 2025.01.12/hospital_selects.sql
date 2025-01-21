@@ -58,6 +58,4 @@ group by
     extract(year from date) 
 order by 
     sponsor_id, 
-    extract(year from date) 
-limit 
-    20;
+    extract(year from date);
