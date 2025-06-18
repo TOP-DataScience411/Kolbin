@@ -1,0 +1,62 @@
+from pandas import read_csv
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import fbeta_score, confusion_matrix
+from sklearn.model_selection import train_test_split
+
+from sys import path
+from pathlib import Path
+
+path_dir = Path(path[0])
+data = read_csv(path_dir / "breast_cancer_filter.csv")
+
+target = data["target"]
+data = data.drop("target", axis=1)
+
+
+x_train, x_test, y_train, y_test = train_test_split(data, target, train_size=0.15)
+
+model = StackingClassifier(
+        estimators = [
+            ('rf', RandomForestClassifier(n_estimators=10, random_state=42)),
+            ('dtc', DecisionTreeClassifier(max_depth=6)),
+            ('svr', LinearSVC(random_state=42))
+            ],
+        final_estimator=LogisticRegression()
+)
+
+model.fit(x_train, y_train).score(x_test, y_test)
+pred = model.predict(x_test)
+
+conf_matr = confusion_matrix(y_test, pred)
+(TN, FP), (FN, TP) = conf_matr
+
+accuracy = (TN + TP) / (TN + FP + FN + TP)
+
+specificity = TN / (TN + FP)
+precision = TP / (FP + TP)
+recall = TP / (FN + TP)
+
+f1 = 2 * precision * recall / (precision + recall)
+fbeta = fbeta_score(y_test, pred, beta=0.5)
+
+print(
+    f'{accuracy=:.1%}',
+    f'{specificity=:.1%}',
+    f'{precision=:.1%}',
+    f'{recall=:.1%}',
+    f'{f1=:.1%}',
+    f'{fbeta=:.1%}',
+    sep='\n'
+)
+
+
+# accuracy=96.1%
+# specificity=93.3%
+# precision=96.1%
+# recall=97.7%
+# f1=96.9%
+# fbeta=96.4%
